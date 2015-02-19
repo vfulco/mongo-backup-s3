@@ -64,3 +64,5 @@ RIGHT="-u myMongoAdmin -p mypasswd --authenticationDatabase myAuthDB"
 MONGO_BACKUP_DIR="/data/backups
 ```
 
+
+
