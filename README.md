@@ -1,6 +1,6 @@
 # mongo-backup-s3
 
-These script have been tested on Linux Ubuntu 14.04 and : 
+These scripts have been tested on Linux Ubuntu 14.04 and : 
 
 | Tool          | Version       |
 |---------------|---------------|
