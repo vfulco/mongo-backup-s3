@@ -37,7 +37,9 @@ s3cmd ls
 
 ### MongoDB
 
-See : http://www.mongodb.org/
+* See : http://www.mongodb.org/
+* Add mongo to your PATH
+
 
 ## Configuration
 
@@ -52,6 +54,7 @@ In /root/.profile file, put folowing informations related to your environment :
 | DB_PWD              | Your password  for your project                         |
 | RIGHT               | Some additionnal parameters during database connection  |
 | MONGO\_BACKUP\_DIR  | Directory where backup are store in local host          |
+| MONGO_HOME          | Directory where mongo is install                        |
 
 *Exemple :*
 ```bash
@@ -61,8 +64,44 @@ DB_USER=myProjectDatabaseUser
 DB_NAME=myProjectDatabaseName
 DB_PWD=myProjectDatabasePasswd
 RIGHT="-u myMongoAdmin -p mypasswd --authenticationDatabase myAuthDB"
-MONGO_BACKUP_DIR="/data/backups
+MONGO_BACKUP_DIR=/data/backups
 ```
 
+## How to use 
+### backupMongo
+* 2 parameters for this script : 
+| Parameter   | Position  | Description                                                         |
+|-------------------------|---------------------------------------------------------------------|
+| cycle       |   1       | This is a subdirectory where backup is push                         |
+| keepalive   |   2       | This parameter indicate how many day you will conserve this backup  |
+* Usage :
+```bash
+backupMongo cycle keepalive
+```
 
+*Example :*
+This command make a backup, push it in ${BUCKET\_URL}/backup/${PROJECT}/daily/${PROJECT}\_*DATE*.tar.gz and conserve it during 7 days
+```bash
+./backupMongo daily 7
+```
 
+This command make a backup, push it in ${BUCKET\_URL}/backup/${PROJECT}/monthly/${PROJECT}\_*DATE*.tar.gz and conserve it during 30 days
+```bash
+./backupMongo monthly 30
+```
+
+*Tips*
+You can easly cron your backup like that :
+```bash
+# Daily Backup conserving last 7 daily backup
+0 1 * * * /script/backupMongo daily 7  >> /var/log/mongo-backup.log 2>&1
+
+# Weekly Backup conserving last 4-7 weekly backup
+0 0 * * 0 /script/backupMongo weekly 31  >> /var/log/mongo-backup.log 2>&1
+
+# Monthly Backup conserving last 12 monthly backup
+0 2 1 * * /script/backupMongo monthly 365  >> /var/log/mongo-backup.log 2>&1
+
+# Yearly Backup conserving last 10 yearly backup
+0 3 1 1 * /script/backupMongo yearly 3600  >> /var/log/mongo-backup.log 2>&1
+```
