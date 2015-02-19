@@ -25,7 +25,7 @@ sudo apt-get update && sudo apt-get install s3cmd
 *Source :* http://s3tools.org/repositories
 
 #### Configure
-* Create one user in your aws console with S3 access :
+* Create one user in your aws console with S3 access,
 * Configure your host with S3 access key and secret key (this action create a .s3cfg file in your home) :
 ```bash
 s3cmd --configure
