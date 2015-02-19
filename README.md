@@ -47,7 +47,7 @@ s3cmd ls
 
 ## Configuration
 
-In /root/.profile file, put folowing informations related to your environment :
+In /root/.profile file, put following informations related to your environment :
 
 | Param               | Description                                             |
 |---------------------|---------------------------------------------------------|
