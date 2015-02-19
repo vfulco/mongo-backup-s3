@@ -71,7 +71,7 @@ MONGO_BACKUP_DIR=/data/backups
 ### backupMongo
 * 2 parameters for this script : 
 | Parameter   | Position  | Description                                                         |
-|-------------------------|---------------------------------------------------------------------|
+|-------------|-----------|---------------------------------------------------------------------|
 | cycle       |   1       | This is a subdirectory where backup is push                         |
 | keepalive   |   2       | This parameter indicate how many day you will conserve this backup  |
 * Usage :
