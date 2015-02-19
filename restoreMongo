@@ -32,7 +32,7 @@ echo "*                                                    *"
 echo "* D A T A B A S E   D E T E C T E D   L O C A L L Y  *"
 echo "*                                                    *"
 echo "******************************************************"
-echo 'show dbs' | mongo ${RIGHT} --quiet
+echo 'show dbs' | ${MONGO_HOME}/bin/mongo ${RIGHT} --quiet
 echo ""
 
 
@@ -52,7 +52,7 @@ if [ ! -n "${last}" ];  then 	cancel "No backup found on S3. Operation canceled 
 
 
 # CHOOSE BACKUP
-echo "Choose the backups you want to apply : [${last}]"; read -p "${S3_ROOT}" yn
+echo "Choose the backup you want to apply : [${last}]"; read -p "${S3_ROOT}" yn
 if [ ! -n "${yn}" ];  then 	yn=${last}	  ; fi
 
 /usr/bin/s3cmd get --force s3://${BUCKET_URL}/backups/${PROJECT}/daily/${yn} /tmp/restore.tar.gz
@@ -79,7 +79,7 @@ if [ ! -n "${dbName}" ]; then
 	dbName=${DB_NAME}
 fi
 
-DB_EXIST=$(echo 'show dbs' | mongo ${RIGHT} --quiet | cut -d " " -f 1 | grep "^${dbName}$")
+DB_EXIST=$(echo 'show dbs' | ${MONGO_HOME}/bin/mongo ${RIGHT} --quiet | cut -d " " -f 1 | grep "^${dbName}$")
 
 if [ -n "${DB_EXIST}" ]; then
 	SUMMARY_TABLE="${SUMMARY_TABLE}\n+---+--------------------------------------------------------------+--------------------------------------------------------------+"
@@ -138,28 +138,28 @@ case "$agreed" in
     [yY]) 
 		if [  -d /tmp/data/backups/daily/${NAME}/${schema}/ ]; then
 	    	echo "Starting restoration for database ${dbName}"
-	        /usr/local/bin/mongorestore ${RIGHT} -db ${DB_NAME_TMP} /tmp/data/backups/daily/${NAME}/${schema}/
+	        ${MONGO_HOME}/bin/mongorestore ${RIGHT} -db ${DB_NAME_TMP} /tmp/data/backups/daily/${NAME}/${schema}/
 	        if [ -n "${DB_EXIST}" ]; then
 	        	echo "Saving current database ... that may take few minute depending db size."
-		        /usr/local/bin/mongo ${RIGHT} --eval "printjson(db.copyDatabase('${dbName}', '${dbName}_${DATE}'))" > /dev/null
+		        ${MONGO_HOME}/bin/mongo ${RIGHT} --eval "printjson(db.copyDatabase('${dbName}', '${dbName}_${DATE}'))" > /dev/null
 		        if [ ! $? -eq 0 ]; then cancel "Failure when saving old database. Operation canceled! " ; fi
 		        
 		        echo "Droping current database ..."
-		        /usr/local/bin/mongo ${RIGHT} ${dbName} --eval "printjson(db.dropDatabase())" > /dev/null
+		        ${MONGO_HOME}/bin/mongo ${RIGHT} ${dbName} --eval "printjson(db.dropDatabase())" > /dev/null
 		        
    		        echo "Restore choose database ..."
-		        /usr/local/bin/mongo ${RIGHT} --eval "printjson(db.copyDatabase('${DB_NAME_TMP}', '${dbName}'))" > /dev/null
-		        /usr/local/bin/mongo ${RIGHT} ${DB_NAME_TMP} --eval "printjson(db.dropDatabase())" > /dev/null
+		        ${MONGO_HOME}/bin/mongo ${RIGHT} --eval "printjson(db.copyDatabase('${DB_NAME_TMP}', '${dbName}'))" > /dev/null
+		        ${MONGO_HOME}/bin/mongo ${RIGHT} ${DB_NAME_TMP} --eval "printjson(db.dropDatabase())" > /dev/null
 
 		       	case "$deleteDB" in
-				    [yY])  /usr/local/bin/mongo ${RIGHT} ${dbName}_${DATE} --eval "printjson(db.dropDatabase())" > /dev/null ;;
+				    [yY])  ${MONGO_HOME}/bin/mongo ${RIGHT} ${dbName}_${DATE} --eval "printjson(db.dropDatabase())" > /dev/null ;;
 					*) echo "Skipping deleting ! " ;;
 				esac
 			else
 				echo "Adding right for new database"
 				
 				INSERT_STATEMENT="db.createUser({user: \"${DB_USER}\",pwd: \"${DB_PWD}\",roles: [{ role: \"readWrite\", db: \"${DB_NAME_TMP}\" }]})"
-				echo "${INSERT_STATEMENT}" | mongo  ${RIGHT} ${DB_NAME_TMP} > /dev/null	
+				echo "${INSERT_STATEMENT}" | ${MONGO_HOME}/bin/mongo  ${RIGHT} ${DB_NAME_TMP} > /dev/null	
 
 
 			fi
