@@ -32,14 +32,15 @@ See : http://www.mongodb.org/
 
 In /root/.profile file, put folowing informations related to your environment :
 
-| Param         | Description                                             |
-|---------------|---------------------------------------------------------|
-| PROJECT       | Your project name. Use in tree view in S3               |
-| BUCKET_URL    | Your bucket S3 url                                      |
-| DB_USER       | Your user in mongo for your project                     |
-| DB_NAME       | Your database name for your project                     |
-| DB_PWD        | Your password  for your project                         |
-| RIGHT         | Some additionnal parameters during database connection  |
+| Param               | Description                                             |
+|---------------------|---------------------------------------------------------|
+| PROJECT             | Your project name. Use in tree view in S3               |
+| BUCKET_URL          | Your bucket S3 url                                      |
+| DB_USER             | Your user in mongo for your project                     |
+| DB_NAME             | Your database name for your project                     |
+| DB_PWD              | Your password  for your project                         |
+| RIGHT               | Some additionnal parameters during database connection  |
+| MONGO\_BACKUP\_DIR  | Directory where backup are store in local host          |
 
 *Exemple :*
 ```bash
