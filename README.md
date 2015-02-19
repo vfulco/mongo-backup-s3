@@ -69,6 +69,8 @@ MONGO_BACKUP_DIR=/data/backups
 
 ## How to use 
 ### backupMongo
+This script will backup your data to S3 Bucket describe in your configuration.
+
 * 2 parameters for this script :
 
 | Parameter   | Position  | Description                                                         |
@@ -80,6 +82,9 @@ MONGO_BACKUP_DIR=/data/backups
 ```bash
 backupMongo cycle keepalive
 ```
+
+*Warning* : 
+To work with restore script, you daily backup must be place in daily directory
 
 *Example :*
 This command make a backup, push it in *${BUCKET\_URL}/backup/${PROJECT}/daily/${PROJECT}\_DATE.tar.gz* and conserve it during 7 days
@@ -108,4 +113,17 @@ You can easly cron your backup like that :
 
 # Yearly Backup conserving last 10 yearly backup
 0 3 1 1 * /script/backupMongo yearly 3600  >> /var/log/mongo-backup.log 2>&1
+```
+
+### restoreMongo
+This script will help you to restore some data to your database.
+
+* Choose which backup will be restore from daily backup
+* Choose if you want to conserve the older database
+* Choose the schema for you restoration
+* Choose the future database name
+* Before each choice, you can see a proposal base on your configuration and your last backup
+
+```bash
+./restoreMongo
 ```
