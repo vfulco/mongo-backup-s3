@@ -65,6 +65,7 @@ DB_NAME=myProjectDatabaseName
 DB_PWD=myProjectDatabasePasswd
 RIGHT="-u myMongoAdmin -p mypasswd --authenticationDatabase myAuthDB"
 MONGO_BACKUP_DIR=/data/backups
+MONGO_HOME=/opt/mongo
 ```
 
 ## How to use 
