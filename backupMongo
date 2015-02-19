@@ -14,7 +14,7 @@ fi
 echo "Project : ${PROJECT}"
 
 if [ ! -d /data/backups/${CYCLE}/ ] ; then
-	mkdir /data/backups/${CYCLE}/
+	mkdir -p /data/backups/${CYCLE}/
 fi
 
 echo " /usr/bin/s3cmd get --recursive --skip-existing s3://${BUCKET_URL}/backups/${PROJECT}/ /data/backups/"
