@@ -29,7 +29,7 @@ sudo apt-get update && sudo apt-get install s3cmd
 *Source :* http://s3tools.org/repositories
 
 #### Configure
-* Create one user in your aws console with S3 access,
+* Create a user in your AWS console with S3 access,
 * Configure your host with S3 access key and secret key (this action create a .s3cfg file in your home) :
 ```bash
 s3cmd --configure
@@ -41,7 +41,7 @@ s3cmd ls
 
 ### MongoDB
 
-* See : http://www.mongodb.org/
+* Please refer to http://www.mongodb.org/
 * Add MongoDB to your PATH
 
 
@@ -51,9 +51,9 @@ In /root/.profile file, put following informations related to your environment :
 
 | Param               | Description                                             |
 |---------------------|---------------------------------------------------------|
-| PROJECT             | Your project name. Use in tree view in S3               |
-| BUCKET_URL          | Your bucket S3 url                                      |
-| DB_USER             | Your user in mongo for your project                     |
+| PROJECT             | Your project name. Used in tree view in S3              |
+| BUCKET_URL          | Your S3 bucket name                                     |
+| DB_USER             | The MongoDB user                                        |
 | DB_NAME             | Your database name for your project                     |
 | DB_PWD              | Your password  for your project                         |
 | RIGHT               | Some additionnal parameters during database connection  |
