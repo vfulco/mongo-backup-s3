@@ -1,7 +1,7 @@
 # mongo-backup-s3
 
-mongo-backup-s3 is a very small project aimed for help you to backup and restore your mongo database. 
-All two script must be place on the host (the same host where is install mongo) and must be run with sufficient right to execute some mongo command line and access to /data.
+mongo-backup-s3 is a very small project aimed for help you to backup and restore your MongoDB database. 
+Both scripts must be placed on the host (the same host where MongoDB is installed) and must be run with sufficient permission to execute some MongoDB commands and access to /data.
 
 
 These scripts have been tested on Linux Ubuntu 14.04 and : 
@@ -42,7 +42,7 @@ s3cmd ls
 ### MongoDB
 
 * See : http://www.mongodb.org/
-* Add mongo to your PATH
+* Add MongoDB to your PATH
 
 
 ## Configuration
