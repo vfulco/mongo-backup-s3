@@ -91,13 +91,13 @@ backupMongo cycle keepalive
 ```
 
 *Example :*
-This command make a backup and upload push it on S3 (`${BUCKET_URL}/backup/${PROJECT}/daily/${PROJECT}_DATE.tar.gz`) and conserve it during 7 days
+This command make a backup and upload it on S3 (`${BUCKET_URL}/backup/${PROJECT}/daily/${PROJECT}_DATE.tar.gz`) and conserve it during 7 days
 
 ```bash
 ./backupMongo daily 7
 ```
 
-This command make a backup and upload push it on S3 (`${BUCKET_URL}/backup/${PROJECT}/monthly/${PROJECT}_DATE.tar.gz`) and conserve it during 30 days
+This command make a backup and upload it on S3 (`${BUCKET_URL}/backup/${PROJECT}/monthly/${PROJECT}_DATE.tar.gz`) and conserve it during 30 days
 
 ```bash
 ./backupMongo monthly 30
