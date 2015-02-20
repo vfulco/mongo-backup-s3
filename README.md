@@ -47,18 +47,19 @@ s3cmd ls
 
 ## Configuration
 
-In /root/.profile file, put following informations related to your environment :
+In /root/.profile file, put the following information related to your environment :
 
 | Param               | Description                                             |
 |---------------------|---------------------------------------------------------|
 | PROJECT             | Your project name. Used in tree view in S3              |
 | BUCKET_URL          | Your S3 bucket name                                     |
 | DB_USER             | The MongoDB user                                        |
-| DB_NAME             | Your database name for your project                     |
+| DB_NAME             | The MongoDB database name                               |
 | DB_PWD              | Your password  for your project                         |
-| RIGHT               | Some additionnal parameters during database connection  |
+| MONGO_OPTS          | Some additionnal parameters for mongo connection        |
 | MONGO\_BACKUP\_DIR  | Directory where backup are store in local host          |
 | MONGO_HOME          | Directory where mongo is install                        |
+| DEFAULT_BACKUP_DIR  | Default directory where restore backup look for backup  |
 
 *Exemple :*
 ```bash
@@ -67,9 +68,10 @@ BUCKET_URL=my.backups.bucket
 DB_USER=myProjectDatabaseUser
 DB_NAME=myProjectDatabaseName
 DB_PWD=myProjectDatabasePasswd
-RIGHT="-u myMongoAdmin -p mypasswd --authenticationDatabase myAuthDB"
+MONGO_OPTS="-u myMongoAdmin -p mypasswd --authenticationDatabase myAuthDB"
 MONGO_BACKUP_DIR=/data/backups
 MONGO_HOME=/opt/mongo
+DEFAULT_BACKUP_DIR=daily
 ```
 
 ## How to use 
@@ -87,9 +89,6 @@ This script will backup your data to S3 Bucket describe in your configuration.
 ```bash
 backupMongo cycle keepalive
 ```
-
-*Warning* : 
-To work with restore script, you daily backup must be place in daily directory
 
 *Example :*
 This command make a backup, push it in `${BUCKET_URL}/backup/${PROJECT}/daily/${PROJECT}_DATE.tar.gz` and conserve it during 7 days
@@ -123,7 +122,7 @@ You can easly cron your backup like that :
 ### restoreMongo
 This script will help you to restore some data to your database.
 
-* Choose which backup will be restore from daily backup
+* Choose which backup will be restore from `DEFAULT_BACKUP_DIR` backup directory
 * Choose if you want to conserve the older database
 * Choose the schema for you restoration
 * Choose the future database name
