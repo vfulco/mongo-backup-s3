@@ -17,7 +17,7 @@ EOF
 
 . /root/.profile
 
-S3_ROOT="s3://${BUCKET_URL}/backups/${PROJECT}/daily/"
+S3_ROOT="s3://${BUCKET_URL}/backups/${PROJECT}/${DEFAULT_BACKUP_DIR}/"
 
 DATE=$(date +%Y%m%d-%H%M)
 COMPTEUR_TASK=1
@@ -43,8 +43,8 @@ echo "*                                                    *"
 echo "*   R E M O T E   B A C K U P   A V A I L A B L E    *"
 echo "*                                                    *"
 echo "******************************************************"
-/usr/bin/s3cmd ls s3://${BUCKET_URL}/backups/${PROJECT}/daily/
-listing=$(/usr/bin/s3cmd ls s3://${BUCKET_URL}/backups/${PROJECT}/daily/)
+/usr/bin/s3cmd ls s3://${BUCKET_URL}/backups/${PROJECT}/${DEFAULT_BACKUP_DIR}/
+listing=$(/usr/bin/s3cmd ls s3://${BUCKET_URL}/backups/${PROJECT}/${DEFAULT_BACKUP_DIR}/)
 echo ""
 
 last=$(echo ${listing} | rev | cut -d '/' -f 1 | rev)
@@ -55,7 +55,7 @@ if [ ! -n "${last}" ];  then 	cancel "No backup found on S3. Operation canceled 
 echo "Choose the backup you want to apply : [${last}]"; read -p "${S3_ROOT}" yn
 if [ ! -n "${yn}" ];  then 	yn=${last}	  ; fi
 
-/usr/bin/s3cmd get --force s3://${BUCKET_URL}/backups/${PROJECT}/daily/${yn} /tmp/restore.tar.gz
+/usr/bin/s3cmd get --force s3://${BUCKET_URL}/backups/${PROJECT}/${DEFAULT_BACKUP_DIR}/${yn} /tmp/restore.tar.gz
 if [ ! $? -eq 0 ]; then cancel "Cannot download file ${yn}. Operation canceled! ";fi
 
 cd /tmp
@@ -64,7 +64,7 @@ tar xvzf /tmp/restore.tar.gz > /dev/null
 if [ ! $? -eq 0 ]; then cancel "Cannot untar file ${yn}. Operation canceled! " ; fi
 cd -
 NAME=${yn%.*.*}
-ls -l /tmp/data/backups/daily/${NAME}/${schema}/
+ls -l /tmp/data/backups/${DEFAULT_BACKUP_DIR}/${NAME}/${schema}/
 
 
 echo "Select one schema for restoration : [${DB_NAME}] : "; read -p "" schema
@@ -136,9 +136,9 @@ fi
 
 case "$agreed" in
     [yY]) 
-		if [  -d /tmp/data/backups/daily/${NAME}/${schema}/ ]; then
+		if [  -d /tmp/data/backups/${DEFAULT_BACKUP_DIR}/${NAME}/${schema}/ ]; then
 	    	echo "Starting restoration for database ${dbName}"
-	        ${MONGO_HOME}/bin/mongorestore ${RIGHT} -db ${DB_NAME_TMP} /tmp/data/backups/daily/${NAME}/${schema}/
+	        ${MONGO_HOME}/bin/mongorestore ${RIGHT} -db ${DB_NAME_TMP} /tmp/data/backups/${DEFAULT_BACKUP_DIR}/${NAME}/${schema}/
 	        if [ -n "${DB_EXIST}" ]; then
 	        	echo "Saving current database ... that may take few minute depending db size."
 		        ${MONGO_HOME}/bin/mongo ${RIGHT} --eval "printjson(db.copyDatabase('${dbName}', '${dbName}_${DATE}'))" > /dev/null
@@ -167,7 +167,7 @@ case "$agreed" in
 	        rm -rf /tmp/data/
 	   
 	    else 
-	    	cancel "No repository name find (/tmp/data/backups/daily/${NAME}/${schema}/). Cannot restore this schema. Operation canceled !"
+	    	cancel "No repository name find (/tmp/data/backups/${DEFAULT_BACKUP_DIR}/${NAME}/${schema}/). Cannot restore this schema. Operation canceled !"
 	    fi 
 
 	;; 
