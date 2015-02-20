@@ -31,8 +31,8 @@ cd ${MONGO_BACKUP_DIR}
 DATE=$(date +%Y%m%d-%H%M)
 BACKUP_NAME=${PROJECT}_${DATE}
 
-echo "${MONGO_HOME}/bin/mongodump ${RIGHT} -o ${MONGO_BACKUP_DIR}/${CYCLE}/${BACKUP_NAME}"
-${MONGO_HOME}/bin/mongodump  ${RIGHT} --port 27017 -o ${MONGO_BACKUP_DIR}/${CYCLE}/${BACKUP_NAME}
+echo "${MONGO_HOME}/bin/mongodump ${MONGO_OPTS} -o ${MONGO_BACKUP_DIR}/${CYCLE}/${BACKUP_NAME}"
+${MONGO_HOME}/bin/mongodump  ${MONGO_OPTS} --port 27017 -o ${MONGO_BACKUP_DIR}/${CYCLE}/${BACKUP_NAME}
 if [ $? -eq 0 ]; then
 	tar cvfz ${MONGO_BACKUP_DIR}/${CYCLE}/${BACKUP_NAME}.tar.gz ${MONGO_BACKUP_DIR}/${CYCLE}/${BACKUP_NAME}
 	if [ $? -eq 0 ]; then

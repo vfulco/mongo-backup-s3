@@ -32,7 +32,7 @@ echo "*                                                    *"
 echo "* D A T A B A S E   D E T E C T E D   L O C A L L Y  *"
 echo "*                                                    *"
 echo "******************************************************"
-echo 'show dbs' | ${MONGO_HOME}/bin/mongo ${RIGHT} --quiet
+echo 'show dbs' | ${MONGO_HOME}/bin/mongo ${MONGO_OPTS} --quiet
 echo ""
 
 
@@ -79,7 +79,7 @@ if [ ! -n "${dbName}" ]; then
 	dbName=${DB_NAME}
 fi
 
-DB_EXIST=$(echo 'show dbs' | ${MONGO_HOME}/bin/mongo ${RIGHT} --quiet | cut -d " " -f 1 | grep "^${dbName}$")
+DB_EXIST=$(echo 'show dbs' | ${MONGO_HOME}/bin/mongo ${MONGO_OPTS} --quiet | cut -d " " -f 1 | grep "^${dbName}$")
 
 if [ -n "${DB_EXIST}" ]; then
 	SUMMARY_TABLE="${SUMMARY_TABLE}\n+---+--------------------------------------------------------------+--------------------------------------------------------------+"
@@ -138,28 +138,28 @@ case "$agreed" in
     [yY]) 
 		if [  -d /tmp/data/backups/${DEFAULT_BACKUP_DIR}/${NAME}/${schema}/ ]; then
 	    	echo "Starting restoration for database ${dbName}"
-	        ${MONGO_HOME}/bin/mongorestore ${RIGHT} -db ${DB_NAME_TMP} /tmp/data/backups/${DEFAULT_BACKUP_DIR}/${NAME}/${schema}/
+	        ${MONGO_HOME}/bin/mongorestore ${MONGO_OPTS} -db ${DB_NAME_TMP} /tmp/data/backups/${DEFAULT_BACKUP_DIR}/${NAME}/${schema}/
 	        if [ -n "${DB_EXIST}" ]; then
 	        	echo "Saving current database ... that may take few minute depending db size."
-		        ${MONGO_HOME}/bin/mongo ${RIGHT} --eval "printjson(db.copyDatabase('${dbName}', '${dbName}_${DATE}'))" > /dev/null
+		        ${MONGO_HOME}/bin/mongo ${MONGO_OPTS} --eval "printjson(db.copyDatabase('${dbName}', '${dbName}_${DATE}'))" > /dev/null
 		        if [ ! $? -eq 0 ]; then cancel "Failure when saving old database. Operation canceled! " ; fi
 		        
 		        echo "Droping current database ..."
-		        ${MONGO_HOME}/bin/mongo ${RIGHT} ${dbName} --eval "printjson(db.dropDatabase())" > /dev/null
+		        ${MONGO_HOME}/bin/mongo ${MONGO_OPTS} ${dbName} --eval "printjson(db.dropDatabase())" > /dev/null
 		        
    		        echo "Restore choose database ..."
-		        ${MONGO_HOME}/bin/mongo ${RIGHT} --eval "printjson(db.copyDatabase('${DB_NAME_TMP}', '${dbName}'))" > /dev/null
-		        ${MONGO_HOME}/bin/mongo ${RIGHT} ${DB_NAME_TMP} --eval "printjson(db.dropDatabase())" > /dev/null
+		        ${MONGO_HOME}/bin/mongo ${MONGO_OPTS} --eval "printjson(db.copyDatabase('${DB_NAME_TMP}', '${dbName}'))" > /dev/null
+		        ${MONGO_HOME}/bin/mongo ${MONGO_OPTS} ${DB_NAME_TMP} --eval "printjson(db.dropDatabase())" > /dev/null
 
 		       	case "$deleteDB" in
-				    [yY])  ${MONGO_HOME}/bin/mongo ${RIGHT} ${dbName}_${DATE} --eval "printjson(db.dropDatabase())" > /dev/null ;;
+				    [yY])  ${MONGO_HOME}/bin/mongo ${MONGO_OPTS} ${dbName}_${DATE} --eval "printjson(db.dropDatabase())" > /dev/null ;;
 					*) echo "Skipping deleting ! " ;;
 				esac
 			else
 				echo "Adding right for new database"
 				
 				INSERT_STATEMENT="db.createUser({user: \"${DB_USER}\",pwd: \"${DB_PWD}\",roles: [{ role: \"readWrite\", db: \"${DB_NAME_TMP}\" }]})"
-				echo "${INSERT_STATEMENT}" | ${MONGO_HOME}/bin/mongo  ${RIGHT} ${DB_NAME_TMP} > /dev/null	
+				echo "${INSERT_STATEMENT}" | ${MONGO_HOME}/bin/mongo  ${MONGO_OPTS} ${DB_NAME_TMP} > /dev/null	
 
 
 			fi
