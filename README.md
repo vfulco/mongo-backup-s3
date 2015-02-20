@@ -56,10 +56,10 @@ In /root/.profile file, put the following information related to your environmen
 | DB_USER             | The MongoDB user                                        |
 | DB_NAME             | The MongoDB database name                               |
 | DB_PWD              | Your password  for your project                         |
-| MONGO_OPTS          | Some additionnal parameters for mongo connection        |
-| MONGO\_BACKUP\_DIR  | Directory where backup are store in local host          |
-| MONGO_HOME          | Directory where mongo is install                        |
-| DEFAULT_BACKUP_DIR  | Default directory where restore backup look for backup  |
+| MONGO_OPTS          | Some additionnal parameters for MongoDB connection      |
+| MONGO\_BACKUP\_DIR  | Root directory where backup are stored in local host    |
+| MONGO_HOME          | Directory where mongo is installed                      |
+| DEFAULT\_BACKUP\_DIR| Default directory where restore script look for backup  |
 
 *Exemple :*
 ```bash
@@ -80,10 +80,10 @@ This script will backup your data to S3 Bucket describe in your configuration.
 
 * 2 parameters for this script :
 
-| Parameter   | Position  | Description                                                         |
-|-------------|-----------|---------------------------------------------------------------------|
-| cycle       |   1       | This is a subdirectory where backup is push                         |
-| keepalive   |   2       | This parameter indicate how many day you will conserve this backup  |
+| Parameter   | Position  | Description                                                                        |
+|-------------|-----------|------------------------------------------------------------------------------------|
+| cycle       |   1       | This is a subdirectory where backup is push (see example for better comprehention) |
+| keepalive   |   2       | This parameter indicate how many day you will conserve this backup                 |
 
 * Usage :
 ```bash
@@ -91,25 +91,25 @@ backupMongo cycle keepalive
 ```
 
 *Example :*
-This command make a backup, push it in `${BUCKET_URL}/backup/${PROJECT}/daily/${PROJECT}_DATE.tar.gz` and conserve it during 7 days
+This command make a backup and upload push it on S3 (`${BUCKET_URL}/backup/${PROJECT}/daily/${PROJECT}_DATE.tar.gz`) and conserve it during 7 days
 
 ```bash
 ./backupMongo daily 7
 ```
 
-This command make a backup, push it in `${BUCKET_URL}/backup/${PROJECT}/monthly/${PROJECT}_DATE.tar.gz` and conserve it during 30 days
+This command make a backup and upload push it on S3 (`${BUCKET_URL}/backup/${PROJECT}/monthly/${PROJECT}_DATE.tar.gz`) and conserve it during 30 days
 
 ```bash
 ./backupMongo monthly 30
 ```
 
 *Tips*
-You can easly cron your backup like that :
+You can easily cron your backup like that :
 ```bash
 # Daily Backup conserving last 7 daily backup
 0 1 * * * /script/backupMongo daily 7  >> /var/log/mongo-backup.log 2>&1
 
-# Weekly Backup conserving last 4-7 weekly backup
+# Weekly Backup conserving last 4-5 weekly backup
 0 0 * * 0 /script/backupMongo weekly 31  >> /var/log/mongo-backup.log 2>&1
 
 # Monthly Backup conserving last 12 monthly backup
@@ -124,7 +124,7 @@ This script will help you to restore some data to your database.
 
 * Choose which backup will be restore from `DEFAULT_BACKUP_DIR` backup directory
 * Choose if you want to conserve the older database
-* Choose the schema for you restoration
+* Choose the schema for your restoration
 * Choose the future database name
 * Before each choice, you can see a proposal base on your configuration and your last backup
 
