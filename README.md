@@ -14,19 +14,7 @@ These scripts have been tested on Linux Ubuntu 14.04 and :
 ## Prerequisite
 ### S3cmd
 #### Setup
-* Import S3tools signing key: 
-```bash
-wget -O- -q http://s3tools.org/repo/deb-all/stable/s3tools.key | sudo apt-key add -
-```  
-* Add the repo to sources.list: 
-```bash
-sudo wget -O/etc/apt/sources.list.d/s3tools.list http://s3tools.org/repo/deb-all/stable/s3tools.list
-```
-* Refresh package cache and install the newest s3cmd: 
-```bash
-sudo apt-get update && sudo apt-get install s3cmd
-```
-*Source :* http://s3tools.org/repositories
+* Please refer to http://s3tools.org/repositories
 
 #### Configure
 * Create a user in your AWS console with S3 access,
